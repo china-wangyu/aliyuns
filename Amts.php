@@ -127,15 +127,18 @@ class Amts
      */
     public static function getPipelineId()
     {
-        session('pipeline_id') != ''&& self::$pipeline_id =session('pipeline_id');
+        session_start([
+            'cookie_lifetime' => 86400,
+            'read_and_close'  => true,
+        ]);
+         isset($_SESSION['pipeline_id'])&& self::$pipeline_id = $_SESSION['pipeline_id'];
         if (self::$pipeline_id == ''){
             $iClientProfile = \DefaultProfile::getProfile(self::$mps_region_id, self::$access_key_id, self::$access_key_secret);
             $client = new \DefaultAcsClient($iClientProfile);
             $request = new Mts\SearchPipelineRequest();
             $response = $client->getAcsResponse($request);
             $pipelines = json_decode(json_encode($response->PipelineList->Pipeline), true);
-            session_start();
-            session('pipeline_id',$pipelines[0]['Id']);
+            $_SESSION['pipeline_id'] = $pipelines[0]['Id'];
             self::$pipeline_id = $pipelines[0]['Id'];
         }
     }
@@ -180,7 +183,6 @@ class Amts
 
     /**
      * 初始化输出资源类型
-     * @return array
      */
     public static function initOutput()
     {
@@ -200,8 +202,7 @@ class Amts
             'Samplerate' => 44100);
         # Ouput->TemplateId
         $output['TemplateId'] = self::$template_id;
-        $outputs = array($output);
-        return $outputs;
+        self::$outputs = array($output);
     }
 
     /**
