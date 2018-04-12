@@ -1,32 +1,37 @@
-# Open API SDK for php developers
+# Aliyuns
 
 ## Requirements
 
 - PHP 5.3+
 
-## Build
-
-- to run unit tests, you will have to configure aliyun-sdk.properties files in your user directory, and make sure your project has corresponding service enabled, eg. openmr.
-
 ## Example
 
 ```php
-include_once '../aliyun-php-sdk-core/Config.php';
-use Ecs\Request\V20140526 as Ecs;
-
-$iClientProfile = DefaultProfile::getProfile("cn-hangzhou", "<your accessKey>", "<your accessSecret>");
-$client = new DefaultAcsClient($iClientProfile);
-
-$request = new Ecs\DescribeRegionsRequest();
-$request->setMethod("GET");
-$response = $client->getAcsResponse($request);
-print_r($response);
+        /**
+         * 初始化参数
+         * \aliyuns\Amts::$mps_region_id 默认：cn-shenzhen
+         * \aliyuns\Amts::$oss_location 默认：oss-cn-shenzhen
+         * \aliyuns\Amts::$access_key_id 阿里云access_key_id需要有对应权限
+         */
+        \aliyuns\Amts::$access_key_id = '阿里云access_key_id';
+        \aliyuns\Amts::$access_key_secret = '阿里云access_key_secret';
+        \aliyuns\Amts::$oss_bucket = '阿里云 oss_bucket';
+        
+        // oss 所属区域
+        \aliyuns\Amts::$mps_region_id = 'cn-shenzhen';
+        \aliyuns\Amts::$oss_location = 'oss-'.\aliyuns\Amts::$mps_region_id;
+        
+        \aliyuns\Amts::$template_id = 'S00000001-200010';
+        
+        // oss 视频源-地址
+        \aliyuns\Amts::$oss_input_object = '1.mp4';
+        // oss 转码视频存放地址
+        \aliyuns\Amts::$oss_output_object = 'output3.mp4';
+        
+        // 获取管道ID，提交作业，视频转码
+        \aliyuns\Amts::init();
 ```
-## Authors && Contributors
 
-- [Zuhe]()
-- [Ma Lijie](https://github.com/malijiefoxmail)
+## Auther 
 
-## License
-
-licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
+china_wangyu@aliyun.com
